@@ -1,0 +1,126 @@
+const express = require('express');
+//const { Pool } = require('pg');
+const app = express();
+const PORT = 8080;
+const username = "apitest";
+const password = "test123";
+
+/*const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres',
+  password: 'postgres',
+  port: 8090,
+});*/
+
+var token = 0;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+async function createVeriler() {
+  try {
+    const query = `
+      CREATE TABLE IF NOT EXISTS veriler (
+        id SERIAL PRIMARY KEY,
+        sub0 smallserial,
+        sub1 smallserial,
+        sub2 smallserial,
+	    debt NUMERIC(12, 2)
+      );
+    `;
+
+    await pool.query(query);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//createVeriler();
+
+app.post('/token', function (req, res) {
+  var txt = "";
+
+  try {	
+	if (req.query.username == username &&
+        req.query.password == password){
+      const d = new Date();
+    
+      token = d.getTime();
+      txt = JSON.stringify({
+        "response": { "token": token },
+        "messages": [{ "code": "0", "message": "OK" }]
+      });
+    }
+	
+	res.writeHead(200, {'Content-Type': 'application/json'});
+  } catch (err) {
+    console.error(err);
+    res.writeHead(500, 'Error has occured');
+  }
+  res.write(txt);
+  res.end();
+});
+
+app.patch('/GetData', function (req, res) {
+  try {
+    const query = `
+      SELECT * FROM veriler;
+    `;
+    //const { rows } = await pool.query(query);
+    const secret = req.header('authorization').split(" ")[1];
+    var txt = "";
+
+    if (secret == token){
+      const rows = { sub0:0, sub1:1, sub2:2, debt:3 };
+
+      txt = JSON.stringify({
+      "response": { "scriptResult": rows, "scriptError": "0", "modId": "4" },
+      "messages": [{ "code": "0", "message": "OK" }]
+      });
+    }
+
+    res.writeHead(200, {'Content-Type': 'application/json'});
+  } catch (err) {
+    console.error(err);
+    res.writeHead(500, 'Error has occured');
+  }
+  res.write(txt);
+  res.end();
+});
+
+app.post('/SendData', async (req, res) => {
+  try {
+	const { sub0, sub1, sub2, debt } = req.body;
+    const query = `
+      INSERT INTO veriler VALUES (sub0, sub1, sub2, debt)
+      ON CONFLICT (sub0)
+	  DO
+	  UPDATE SET debt = SUM(SUM(excluded.debt));
+    `;
+	const secret = req.header('authorization').split(" ")[1];
+    var txt = "";
+	
+	if (secret == token){
+      const values = [sub0, sub1, sub2, debt];
+      //const result = await pool.query(query, values);
+
+      txt = JSON.stringify({
+        /*"response": { "Id": result.rows[0].id },*/
+        "messages": [{ "code": "0", "message": "OK" }]
+      });
+    }
+	
+	res.writeHead(200, {'Content-Type': 'application/json'});
+  } catch (err) {
+    console.error(err);
+    res.writeHead(500, 'Error has occured');
+  }
+  res.write(txt);
+  res.end();
+});
+
+app.listen(PORT, function (err) {
+  if (err) console.log(err);
+  console.log("Server listening on PORT", PORT);
+});
