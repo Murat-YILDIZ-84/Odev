@@ -1,0 +1,17 @@
+.App {
+  width: 70%;
+  height: 100vh;
+}
+
+table {
+  width: 300px;
+}
+
+th,
+td {
+  border: 1px solid black;
+}
+
+tr:nth-child(even) {
+  background-color: gainsboro;
+}
