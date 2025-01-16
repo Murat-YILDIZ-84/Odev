@@ -1,0 +1,27 @@
+{
+  "response": {
+    "scriptResult": [
+      { "sub0": 120, "sub1": 0, "sub2": 0, "debt": 2206418.32 },
+      { "sub0": 120, "sub1": 1, "sub2": 2, "debt": 2206418.32 },
+      { "sub0": 153, "sub1": 0, "sub2": 0, "debt": 5164995 },
+      { "sub0": 153, "sub1": 1, "sub2": 0, "debt": 0 },
+      { "sub0": 153, "sub1": 1, "sub2": 2, "debt": 86 },
+      { "sub0": 153, "sub1": 1, "sub2": 18, "debt": 47271.43 },
+      { "sub0": 153, "sub1": 1, "sub2": 8, "debt": 1322.22 },
+      { "sub0": 153, "sub1": 1, "sub2": 1, "debt": 2970.3 },
+      { "sub0": 320, "sub1": 0, "sub2": 0, "debt": 0 },
+      { "sub0": 320, "sub1": 1, "sub2": 0, "debt": 0 },
+      { "sub0": 191, "sub1": 1, "sub2": 0, "debt": 0 },
+      { "sub0": 191, "sub1": 2, "sub2": 0, "debt": 0 },
+      { "sub0": 365, "sub1": 0, "sub2": 0, "debt": 0 }
+    ],
+    "scriptError": "0",
+    "modId": "4"
+  },
+  "messages": [
+    {
+      "code": "0",
+      "message": "OK"
+    }
+  ]
+}
